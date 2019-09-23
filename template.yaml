@@ -1,0 +1,103 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-app
+
+  Sample SAM Template for sam-app
+  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 240
+    CodeUri: hello-world/
+    Runtime: nodejs10.x
+    Environment:
+      Variables:
+        MONGODB_URI: "<DB-connection-string-here>"
+
+Resources:
+  CreateProductFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Handler: app.createProduct
+      Events:
+        CreateProduct:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /product
+            Method: post
+  GetProductByIdFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Handler: app.getProductById
+      Events:
+        GetProductById:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /product/{id}
+            Method: get
+  GetAllProductsFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Handler: app.getAllProducts
+      Events:
+        GetAllProducts:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /products
+            Method: get
+  UpdateProductFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Handler: app.updateProduct
+      Events:
+        UpdateProduct:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /product/{id}
+            Method: put
+  DeleteProductFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      Handler: app.deleteProduct
+      Events:
+        DeleteProduct:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /product/{id}
+            Method: delete
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  CreateProductApi:
+    Description: "API Gateway endpoint URL for Prod stage for Create Product function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/product/"
+  CreateProductFunction:
+    Description: "Create Product Lambda Function ARN"
+    Value: !GetAtt CreateProductFunction.Arn
+  GetProductByIdApi:
+    Description: "API Gateway endpoint URL for Prod stage for GetProductById function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/product/{id}/"
+  GetProductByIdFunction:
+    Description: "GetProductById Lambda Function ARN"
+    Value: !GetAtt GetProductByIdFunction.Arn
+  GetAllProductsApi:
+    Description: "API Gateway endpoint URL for Prod stage for GetAllProducts function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/products/"
+  GetAllProductsFunction:
+    Description: "GetAllProducts Lambda Function ARN"
+    Value: !GetAtt GetAllProductsFunction.Arn
+  UpdateProductApi:
+    Description: "API Gateway endpoint URL for Prod stage for UpdateProduct function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/product/{id}/"
+  UpdateProductFunction:
+    Description: "UpdateProduct Lambda Function ARN"
+    Value: !GetAtt UpdateProductFunction.Arn
+  DeleteProductApi:
+    Description: "API Gateway endpoint URL for Prod stage for DeleteProduct function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/product/{id}/"
+  DeleteProductFunction:
+    Description: "DeleteProduct Lambda Function ARN"
+    Value: !GetAtt DeleteProductFunction.Arn
