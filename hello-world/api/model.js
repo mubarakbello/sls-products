@@ -13,10 +13,11 @@ const Products = mongoose.Schema({
     type: String
   },
   sku: {
-    type: Number
+    type: Number,
+    default: 1
   },
   status: {
-    type: String
+    type: Number
   },
   createdAt: {
     type: Date,
