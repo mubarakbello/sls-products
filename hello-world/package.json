@@ -9,7 +9,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "mongoosastic": "^4.5.1",
-    "mongoose": "^5.7.1"
+    "mongoose": "^5.7.5"
   },
   "scripts": {
     "test": "mocha tests/unit/"
